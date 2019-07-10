@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import './ToDo.css';
-import ToDoItem from './components/ToDoItem';
+import ToDoItem from './components/ToDoItem/ToDoItem';
 import Logo from './assets/logo.png';
 
 class ToDo extends Component {
@@ -9,10 +9,12 @@ class ToDo extends Component {
         this.state = {
             list: [
                 {
-                    'todo': "Wash and take away the Kurzhiy's cup from WC"
+                    'todo': "Wash and take away the Kurzhiy's cup from WC",
+                    id:1
                 },
                 {
-                    'todo': 'Do some rollton and cigarettes'
+                    'todo': 'Do some rollton and cigarettes',
+                    id:2
                 }
             ],
             todo: ''
@@ -20,15 +22,21 @@ class ToDo extends Component {
     };
 
     createNewToDoItem = () => {
-      this.setState(({ list, todo }) => ({
-        list: [
-            ...list,
-          {
-            todo
-          }
-        ],
-        todo: ''
-      }));
+      // this.setState(({ list, todo }) => ({
+      //   list: [
+      //       ...list,
+      //     {
+      //       todo
+      //     }
+      //   ],
+      //   todo: ''
+      // }));
+        let newState = {...this.state}
+
+        newState.list.push({'todo' : newState.todo, id: newState.list.length+1})
+        newState.todo = ''
+        this.setState(newState)
+      
     };
 
     handleKeyPress = e => {
@@ -45,6 +53,16 @@ class ToDo extends Component {
       });
     };
 
+    handleDeleteTask = (id) =>{
+      console.log(id);
+      let newState = {...this.state}
+      for(let i = 0; i < newState.list.length; i++){
+        if (newState.list[i].id === id){
+          newState.list.pop(i);
+          this.setState(newState);
+        }
+      }
+    }
     render() {
         return (
             <div className="ToDo">
@@ -58,6 +76,8 @@ class ToDo extends Component {
                                 return <ToDoItem
                                             key={key}
                                             item={item.todo}
+                                            id={item.id}
+                                            onDelete={this.handleDeleteTask}
                                         />
                           }
                         )}
