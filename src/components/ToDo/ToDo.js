@@ -1,7 +1,6 @@
 import React, {Component} from 'react';
 import './ToDo.css';
 import ToDoItem from '../ToDoItem/ToDoItem';
-import Logo from '/magisoft/magisale-internship-todo/src/assets/logo.png';
 import Popup from "../Popup/Popup";
 
 class ToDo extends Component {
@@ -99,7 +98,6 @@ class ToDo extends Component {
         const { list, showPopup } = this.state
         return (
             <div className="ToDo">
-                <img className="Logo" src={Logo} alt="React logo"/>
                 <h1 className="ToDo-Header">MAGISOFT REACT INTERNSHIP TODO</h1>
                 <div className="ToDo-Container">
 

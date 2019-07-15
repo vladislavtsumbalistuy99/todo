@@ -1,6 +1,7 @@
-import React, { PropTypes } from 'react';import './style.css'
+import React, { Component} from 'react';
+import './style.css'
 
-class Popup extends React.Component {
+class Popup extends Component {
   constructor(props){
     super(props)
     this.state = {
@@ -17,7 +18,7 @@ class Popup extends React.Component {
   }
   render(){
     console.log(this.props)
-    const { isVisible, closePopup} = this.props
+    const {closePopup} = this.props
     const {title, todo} = this.props.todo
     return(
       <div className='pop-up' > {/*style={{display: isVisible? 'flex' : 'none'}}*/}
