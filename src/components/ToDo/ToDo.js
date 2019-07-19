@@ -57,6 +57,7 @@ class ToDo extends Component {
     }
 
     createNewToDoItem = () => {
+     
       this.setState(({ list, todo, title, id }) => ({
         list: [
             ...list,
@@ -69,6 +70,7 @@ class ToDo extends Component {
         todo: '',
         title:''
       }));
+
       // let newState = {...this.state}
       // newState.list.push({'title':newState.title, 'todo' : newState.todo, id: newState.list.length+1})
       // newState.title = ''

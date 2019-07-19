@@ -58,11 +58,15 @@ class ToDoItem extends Component {
             
             <div className="ToDoItem">
                 <div className="ToDoItem-Text"> 
-                    <p>Title: {title}</p> 
-                    <p className ={classNames} onClick = {this.handleLabelClick}><span>{id}. </span>{item}</p>  
-                    <button onClick={()=>editTodo({id, title, todo: item})}>Edit</button>
-                    <button onClick={this.handleImportantClick}>!</button>
-                    <button onClick={()=>onDelete(id)}>Х</button>
+                    <p>Title: {title}</p>
+                    <div>
+                        <p className={classNames} onClick = {this.handleLabelClick}>{item}</p>  
+                        <div className="btns">
+                            <button onClick={()=>editTodo({id, title, todo: item})}>Edit</button>
+                            <button onClick={this.handleImportantClick}>!</button>
+                            <button onClick={()=>onDelete(id)}>Х</button>
+                        </div>
+                    </div> 
                 </div>
             </div>
         );
