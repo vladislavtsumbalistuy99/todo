@@ -26,25 +26,54 @@ class ToDo extends Component {
               id: 1,
               title: 1,
               todo: 1
-            }
+            },
+            doneCounter:0,
+            importantCounter:0
         };
     };
 
+    changeImportantCounter = (important) => {
+      let { importantCounter } = this.state;
+      if(important){
+        importantCounter++;
+        this.setState({importantCounter: importantCounter})
+      }
+      else{
+        importantCounter--;
+        this.setState({importantCounter: importantCounter})
+      }
+    }
+
+    changeDoneCounter = (done) => {
+      let { doneCounter } = this.state;
+      if(done){
+        doneCounter++;
+        this.setState({doneCounter: doneCounter})
+      }
+      else{
+        doneCounter--;
+        this.setState({doneCounter: doneCounter})
+      }
+    }
+
     createNewToDoItem = () => {
-      // this.setState(({ list, todo }) => ({
-      //   list: [
-      //       ...list,
-      //     {
-      //       todo
-      //     }
-      //   ],
-      //   todo: ''
-      // }));
-        let newState = {...this.state}
-        newState.list.push({'title':newState.title, 'todo' : newState.todo, id: newState.list.length+1})
-        newState.title = ''
-        newState.todo = ''
-        this.setState(newState)
+      this.setState(({ list, todo, title, id }) => ({
+        list: [
+            ...list,
+          {
+            id,
+            title,
+            todo
+          }
+        ],
+        todo: '',
+        title:''
+      }));
+      // let newState = {...this.state}
+      // newState.list.push({'title':newState.title, 'todo' : newState.todo, id: newState.list.length+1})
+      // newState.title = ''
+      // newState.todo = ''
+      // this.setState(newState)
       
     };
 
@@ -67,6 +96,7 @@ class ToDo extends Component {
         title: e.target.value
       })
     }
+
     saveEditedTask = (task) => {
       console.log(task)
       let { list } = this.state
@@ -77,6 +107,7 @@ class ToDo extends Component {
       })
       this.setState({list}, ()=>this.closePopup()) 
     }
+
     handleDeleteTask = (id) =>{
       console.log(id);
       let newState = {...this.state}
@@ -87,42 +118,45 @@ class ToDo extends Component {
         }
       }
     }
+
     closePopup = () => {
       this.setState({showPopup: false})
     }
+
     showPopup = (item) => {
       console.log(item)
       this.setState({activeItem:item, showPopup: true}, this.setState({activeItem:item, showPopup: true}))
     }
+
     render() {
-        const { list, showPopup } = this.state
+        const { list, showPopup, doneCounter, importantCounter } = this.state;
+        
         return (
             <div className="ToDo">
                 <h1 className="ToDo-Header">MAGISOFT REACT INTERNSHIP TODO</h1>
                 <div className="ToDo-Container">
-
                     <div className="ToDo-Content">
+                      <p>{list.length-doneCounter} more to do, {doneCounter} done, {importantCounter} important</p>
                         {list.map(({title, todo, id}, key) => {
-                                return <ToDoItem
-                                            key={key}
-                                            title={title}
-                                            item={todo}
-                                            id={id}
-                                            onDelete={this.handleDeleteTask}
-                                            editTodo={this.showPopup}
-                                        />
+                          return <ToDoItem
+                                      key={key}
+                                      title={title}
+                                      item={todo}
+                                      id={id}
+                                      onDelete={this.handleDeleteTask}
+                                      editTodo={this.showPopup}
+                                      changeDoneCounter = {this.changeDoneCounter}
+                                      changeImportantCounter = {this.changeImportantCounter}
+                                  />
                           }
                         )}
                     </div>
 
                     <div>
-                       <input type="text" value={this.state.title} onChange={this.handleTitleInput} onKeyPress={this.handleKeyPress} placeholder="Enter title"/>
-
-                       <input type="text" value={this.state.todo} onChange={this.handleInput} onKeyPress={this.handleKeyPress} placeholder="Enter new todo"/>
-                       
-                       <button className="ToDo-Add" onClick={this.createNewToDoItem}>+</button>
+                      <input type="text" value={this.state.title} onChange={this.handleTitleInput} onKeyPress={this.handleKeyPress} placeholder="Enter title"/>
+                      <input type="text" value={this.state.todo} onChange={this.handleInput} onKeyPress={this.handleKeyPress} placeholder="Enter new todo"/>
+                      <button className="ToDo-Add" onClick={this.createNewToDoItem}>+</button>
                     </div>
-
                 </div>
                 {showPopup?
                   (<Popup todo={this.state.activeItem} saveChanges = {this.saveEditedTask} closePopup={this.closePopup}/>)

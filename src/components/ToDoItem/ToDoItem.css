@@ -12,3 +12,13 @@
     padding: 12px;
     margin-right: 10px;
 }
+
+.done {
+    text-decoration:line-through; 
+}
+
+.important {
+    color: rgb(92, 151, 247);
+    text-decoration: underline;
+    font-weight: bold;
+}
