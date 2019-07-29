@@ -2,33 +2,23 @@ import React, {Component} from 'react';
 import './ToDo.css';
 import ToDoItem from '../ToDoItem/ToDoItem';
 import Popup from "../Popup/Popup";
+import { connect } from 'react-redux'
+import { mapStateToProps, mapDispatchToProps } from "./container";
 
 class ToDo extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            list: [
-                {
-                    title:"Wash",    
-                    todo: "Wash and take away the Kurzhiy's cup from WC",
-                    id:1
-                },
-                {   
-                    title:"Do today",
-                    todo: 'Do some rollton and cigarettes',
-                    id:2
-                }
-            ],
-            title:'',
-            todo: '',
-            showPopup: false,
-            activeItem: {
-              id: 1,
-              title: 1,
-              todo: 1
-            },
-            doneCounter:0,
-            importantCounter:0
+          title:'',
+          todo: '',
+          showPopup: false,
+          activeItem: {
+            id: 1,
+            title: 1,
+            todo: 1
+          },
+          doneCounter:0,
+          importantCounter:0
         };
     };
 
@@ -57,35 +47,23 @@ class ToDo extends Component {
     }
 
     createNewToDoItem = () => {
-     
-      this.setState(({ list, todo, title, id }) => ({
-        list: [
-            ...list,
-          {
-            id,
-            title,
-            todo
-          }
-        ],
+      const { todo, title } = this.state;
+      this.props.addToDo({
+        id: this.props.toDo.length + 1,
+        title: title,
+        todo: todo,
+        done: false,
+        important: false
+      })
+      this.setState(({ todo, title }) => ({
         todo: '',
         title:''
       }));
-
-      // let newState = {...this.state}
-      // newState.list.push({'title':newState.title, 'todo' : newState.todo, id: newState.list.length+1})
-      // newState.title = ''
-      // newState.todo = ''
-      // this.setState(newState)
-      
     };
 
-    handleKeyPress = e => {
-        if (e.target.value !== '') {
-          if (e.key === 'Enter') {
-            this.createNewToDoItem();
-          }
-        }
-    };
+    handleDeleteTask = (id) =>{
+      this.props.deleteToDo(id);
+    }
 
     handleInput = e => {
       this.setState({
@@ -100,7 +78,6 @@ class ToDo extends Component {
     }
 
     saveEditedTask = (task) => {
-      console.log(task)
       let { list } = this.state
       list.forEach((item)=>{
         if(item.id === task.id){
@@ -110,36 +87,26 @@ class ToDo extends Component {
       this.setState({list}, ()=>this.closePopup()) 
     }
 
-    handleDeleteTask = (id) =>{
-      console.log(id);
-      let newState = {...this.state}
-      for(let i = 0; i < newState.list.length; i++){
-        if (newState.list[i].id === id){
-          newState.list.pop(i);
-          this.setState(newState);
-        }
-      }
-    }
-
     closePopup = () => {
       this.setState({showPopup: false})
     }
 
     showPopup = (item) => {
-      console.log(item)
       this.setState({activeItem:item, showPopup: true}, this.setState({activeItem:item, showPopup: true}))
     }
 
     render() {
-        const { list, showPopup, doneCounter, importantCounter } = this.state;
-        
+        const { showPopup, doneCounter, importantCounter } = this.state;
+        const { toDo } = this.props;
+        console.log(this.props)
+    
         return (
             <div className="ToDo">
                 <h1 className="ToDo-Header">MAGISOFT REACT INTERNSHIP TODO</h1>
                 <div className="ToDo-Container">
                     <div className="ToDo-Content">
-                      <p>{list.length-doneCounter} more to do, {doneCounter} done, {importantCounter} important</p>
-                        {list.map(({title, todo, id}, key) => {
+                      <p>{toDo.length - doneCounter} more to do, {doneCounter} done, {importantCounter} important</p>
+                        {toDo.map(({title, todo, id}, key) => {
                           return <ToDoItem
                                       key={key}
                                       title={title}
@@ -170,4 +137,7 @@ class ToDo extends Component {
     }
 }
 
-export default ToDo;
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(ToDo);
